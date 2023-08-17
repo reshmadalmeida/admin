@@ -1,0 +1,43 @@
+{
+  "coupons": [
+    {
+      "id": 1,
+      "code": "KOD5TA",
+      "type": "Active",
+      "discount": "10% off",
+      "validity": "14th Aug to 14th Sep",
+      "enrollments": 12,
+      "offerPrice": "22000",
+      "validFrom": "14th Aug",
+      "validTo": "14th Sep",
+      "suggest": true,
+      "product": "Basic Science"
+    },
+    {
+      "id": 2,
+      "code": "LKSU3G",
+      "type": "Expired",
+      "discount": "10% off",
+      "validity": "13th Mar to 14th April",
+      "enrollments": 12,
+      "offerPrice": "25000",
+      "validFrom": "13th Mar",
+      "validTo": "14th April",
+      "suggest": true,
+      "product": "Test Prep + Basic Sciences combo"
+    },
+    {
+      "id": 3,
+      "code": "LKSU3G",
+      "type": "Inactive",
+      "discount": "10% off",
+      "validity": "14th Sep to 14th Oct",
+      "enrollments": 12,
+      "offerPrice": "26000",
+      "validFrom": "14th Sep",
+      "validTo": "14th Oct",
+      "suggest": false,
+      "product": "Test Prep"
+    }
+  ]
+}
