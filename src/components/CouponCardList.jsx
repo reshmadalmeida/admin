@@ -4,6 +4,7 @@ import CardListHeader from "./common/CardListHeader";
 import CardListIcons from "./common/CardListIcons";
 
 function CouponCardList({ coupons, handleDelete, handleEdit }) {
+
   return (
     <Box>
       {coupons?.map((coupon, _id) => (
@@ -27,7 +28,8 @@ function CouponCardList({ coupons, handleDelete, handleEdit }) {
             />
             <CardListIcons
               discount={coupon?.discount}
-              validity={coupon?.validity}
+              validFrom={coupon?.validFrom}
+              validTo={coupon?.validTo}
               enrollment={coupon?.enrollments}
             />
           </CardContent>

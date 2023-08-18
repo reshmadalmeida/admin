@@ -22,7 +22,6 @@ function Coupons() {
   const handleCloseModal = () => setIsOpenModal(false);
   const handleCloseDeactivateModal = () => setIsOpenDeactivateModal(false);
   const [editData, setEditData] = useState(null);
-  const id = editData?.id;
 
   useEffect(() => {
     (async () => {
@@ -36,18 +35,12 @@ function Coupons() {
     setEditData(null);
   };
 
-  const submitHandler = (updatedData, isEditDataMode, editData) => {
-    //api call here
-    let latestCouponData;
-    if (isEditDataMode) {
-      latestCouponData = editCoupons(id, updatedData);
-    } else {
-      latestCouponData = createCoupons(updatedData);
-    }
-    const latestData = [...coupons, latestCouponData];
-    setCoupons(latestData);
+  const submitHandler = async () => {
+    const couponsList = await getCoupons();
+    setCoupons(couponsList);
     handleCloseModal();
   };
+
   const handleEdit = (coupon) => {
     setEditData(coupon);
     setIsOpenModal(true);
@@ -58,7 +51,13 @@ function Coupons() {
     setDeleteCoupon(coupon);
   };
   const confirmDeleteHandler = () => {
-    deleteCoupons(deleteCoupon?.id);
+    deleteCoupons(deleteCoupon?.id).then(async (res) => {
+      if (res.status === 200) {
+        const couponsList = await getCoupons();
+        setCoupons(couponsList);
+      } else console.log("error");
+    });
+
     handleCloseDeactivateModal();
   };
 

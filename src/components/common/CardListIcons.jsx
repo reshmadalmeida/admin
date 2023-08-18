@@ -5,7 +5,9 @@ import discountIcon from "../../assets/discount.svg";
 import validityIcon from "../../assets/validity.svg";
 import enrollmentIcon from "../../assets/enrollment.svg";
 
-function CardListIcons({ discount, validity, enrollment }) {
+function CardListIcons({ discount, validFrom, validTo, enrollment }) {
+  const checkValidDate = validTo === "Invalid date" ? "undefined" : validTo;
+  const validity = `${validFrom} to ${checkValidDate}`;
   return (
     <Box display={"flex"} fontSize="12px">
       <Typography color={"#A8A8A8"} pr={4} display="flex" alignItems="center">

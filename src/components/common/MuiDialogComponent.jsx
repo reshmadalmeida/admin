@@ -46,10 +46,10 @@ const MuiDialogComponent = (props) => {
           onClick={handleSubmit}
           sx={{
             marginRight: "15px",
-            background: "#E85555",
+            backgroundColor: "#E85555",
             textTransform: "capitalize",
-            "& :hover": {
-              background: "#E85555",
+            "&:hover": {
+              backgroundColor: "#E85555",
             },
           }}
         >

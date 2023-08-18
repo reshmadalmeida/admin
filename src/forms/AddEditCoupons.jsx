@@ -15,6 +15,8 @@ import PercentIcon from "@mui/icons-material/Percent";
 
 import MuiDropdownComponent from "../components/common/MuiDropdownComponent";
 import PopoverTimePicker from "../components/PopoverTimePicker";
+import { createCoupons, editCoupons } from "../services/api";
+import { dateFormat } from "../utils/Utils";
 
 function AddEditCoupons(props) {
   const { submitHandler, isEditDataMode, editData } = props;
@@ -67,7 +69,21 @@ function AddEditCoupons(props) {
   // }, [offerPrice]);
 
   const onSubmit = (formData) => {
-    submitHandler(formData, isEditDataMode, editData);
+    const validTo = dateFormat(formData.validTo);
+    const validFrom = dateFormat(formData.validFrom);
+    const payload = { ...formData, type: "Active", validTo, validFrom };
+    const id = editData?.id;
+    if (isEditDataMode) {
+      editCoupons(id, payload).then((res) => {
+        if (res.status === 200) submitHandler();
+        else console.log("error");
+      });
+    } else {
+      createCoupons(payload).then((res) => {
+        if (res.status === 201) submitHandler();
+        else console.log("error");
+      });
+    }
   };
 
   const currentDateTime = new Date();
@@ -119,7 +135,7 @@ function AddEditCoupons(props) {
           <TextField
             placeholder="Coupon code"
             type="alphanumeric"
-            inputProps={{ minLength: 6, maxLength: 6, content: "capitalize" }}
+            inputProps={{ minLength: 6, maxLength: 6 }}
             error={Boolean(errors.code)}
             helperText={
               errors.code
