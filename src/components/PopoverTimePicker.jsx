@@ -1,57 +1,38 @@
-import { Popover } from "@mui/material";
+import React from "react";
 import {
   LocalizationProvider,
-  StaticTimePicker,
-  TimePicker,
+  MobileDateTimePicker,
 } from "@mui/x-date-pickers";
-import React, { useState } from "react";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 
 function PopoverTimePicker({
   selectedDate,
-  handleDateChange,
+  handleTimeChange,
   helperText,
   error,
   label,
+  defaultValue,
 }) {
-  // const [anchorEl, setAnchorEl] = useState(null);
-
-  // const handleClose = () => {
-  //   setAnchorEl(null);
-  // };
+  console.log(selectedDate, defaultValue, "...");
   return (
     <>
-      {/* <Popover
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-      > */}
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <TimePicker
+        <MobileDateTimePicker
+          defaultValue={dayjs(defaultValue)}
           label={label}
-          value={dayjs(selectedDate)}
-          onChange={handleDateChange}
+          format="DD MMM YYYY HH:mm:A"
+          onChange={handleTimeChange}
           slotProps={{
             textField: {
               helperText,
               error,
             },
           }}
+          disablePast
         />
       </LocalizationProvider>
-
-      {/* <StaticTimePicker defaultValue={dayjs("2022-04-17T15:30")} /> */}
-      {/* </Popover> */}
     </>
   );
 }

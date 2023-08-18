@@ -13,7 +13,6 @@ const MuiDropdownComponent = ({
       <Select
         value={selectedField}
         placeholder={placeholder}
-        // sx={{}}
         onChange={handleDDChange}
         slotProps={{
           textField: {

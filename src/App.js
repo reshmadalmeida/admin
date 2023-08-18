@@ -10,15 +10,14 @@ import SidePanel from "./components/common/SidePanel";
 import Header from "./components/common/Header";
 import ErrorBoundary from "./components/common/ErrorBoundary";
 import Loader from "./components/common/Loader";
-import { TimePicker } from "@mui/x-date-pickers";
 
 function App() {
   return (
     <Box>
       <Header />
-      <Stack>
+      <Stack direction="row" >
         <SidePanel />
-        <Box>
+        <Box flex="1">
           <Suspense fallback={<Loader visible />}>
             <ErrorBoundary>
               <Routes>

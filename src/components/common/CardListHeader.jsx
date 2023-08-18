@@ -1,16 +1,7 @@
-import {
-  Box,
-  Button,
-  IconButton,
-  Popover,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  Typography,
-} from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useState } from "react";
+import { Box, Button, IconButton, Typography } from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+
 import EditDeleteCoupon from "../EditDeleteCoupon";
 
 function CardListHeader({ coupon, code, handleEdit, handleDelete }) {
@@ -39,15 +30,16 @@ function CardListHeader({ coupon, code, handleEdit, handleDelete }) {
           sx={{
             pointerEvents: "none",
             margin: "auto",
-            backgroundColor: coupon.type === "Active" ? "#269A5A" : "#A8A8A8",
+            backgroundColor: coupon?.type === "Active" ? "#269A5A" : "#A8A8A8",
             color: "#F7F7F7",
             "&:hover": {
-              backgroundColor: coupon.type === "Active" ? "#269A5A" : "#A8A8A8",
+              backgroundColor:
+                coupon?.type === "Active" ? "#269A5A" : "#A8A8A8",
               color: "#F7F7F7",
             },
           }}
         >
-          {coupon.type}
+          {coupon?.type}
         </Button>
         <IconButton onClick={handleClick}>
           <MoreVertIcon />

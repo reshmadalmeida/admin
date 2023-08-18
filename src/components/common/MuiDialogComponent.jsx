@@ -32,7 +32,7 @@ const MuiDialogComponent = (props) => {
       <DialogActions sx={{ padding: "16px 0px" }}>
         <Button
           variant="outlined"
-          onClick={handleSubmit}
+          onClick={handleCloseModal}
           sx={{
             textTransform: "capitalize",
             color: "#4A4A4A",
@@ -43,7 +43,7 @@ const MuiDialogComponent = (props) => {
         </Button>
         <Button
           variant="contained"
-          onClick={handleCloseModal}
+          onClick={handleSubmit}
           sx={{
             marginRight: "15px",
             background: "#E85555",

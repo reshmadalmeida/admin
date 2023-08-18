@@ -16,10 +16,10 @@ export default function MuiModel(props) {
     handleCloseModal,
     modalContentType,
     submitHandler,
-    editData
+    editData,
   } = props;
   
-  // const isEditDataMode = Boolean(editData?._id);
+  const isEditDataMode = Boolean(editData?.id);
   const component = {
     ADD_EDIT_COUPONS: AddEditCoupons,
   };
@@ -42,7 +42,7 @@ export default function MuiModel(props) {
             submitHandler={submitHandler}
             handleCloseModal={handleCloseModal}
             editData={editData}
-            // isEditDataMode={isEditDataMode}
+            isEditDataMode={isEditDataMode}
           />
         </DialogContent>
       </Dialog>

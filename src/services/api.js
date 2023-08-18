@@ -1,9 +1,9 @@
 import axios from "axios";
+
 //GET 
 export const getCoupons = () =>
   axios.get("http://localhost:3001/coupons")
     .then(({ data }) => {
-      console.log(data, "...")
       return data;
     })
     .catch((error) => {
@@ -11,10 +11,10 @@ export const getCoupons = () =>
       return Promise.reject(error);
     });
 
-export const createCoupons = () =>
-  axios.post("http://localhost:3001/coupons")
+//CREATE
+export const createCoupons = (formData) =>
+  axios.post("http://localhost:3001/coupons", formData)
     .then(({ data }) => {
-      console.log(data, "...")
       return data;
     })
     .catch((error) => {
@@ -22,13 +22,21 @@ export const createCoupons = () =>
       return Promise.reject(error);
     });
 
+//EDIT
+export const editCoupons = (couponId, formData) => {
+  axios.put(`http://localhost:3001/coupons/${couponId}`, formData)
+    .then(({ data }) => {
+      return data;
+    })
+    .catch((error) => {
+      console.log(error);
+      return Promise.reject(error);
+    });
+}
 
-
-
-export const deleteCoupons = (couponId) => {
-  console.log(couponId, "...")
-  axios.delete(`http://localhost:3000/coupons/${couponId}`)
-
+//DELETE
+export const deleteCoupons = async (couponId) => {
+  await axios.delete(`http://localhost:3001/coupons/${couponId}`)
     .then(({ data }) => {
       console.log(data, "deleted...")
       return data;

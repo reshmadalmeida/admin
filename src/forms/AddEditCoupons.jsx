@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import MuiDropdownComponent from "../components/common/MuiDropdownComponent";
+import React, { useEffect } from "react";
 import {
   Box,
   Button,
@@ -11,15 +10,15 @@ import {
   TextField,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
-import moment from "moment";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import CurrencyRupeeIcon from "@mui/icons-material/CurrencyRupee";
+import PercentIcon from "@mui/icons-material/Percent";
 
-import BasicDatePicker from "../components/common/BasicDatePicker";
-import { ENROLLMENTS_LABEL } from "../constants/routeConstants";
+import MuiDropdownComponent from "../components/common/MuiDropdownComponent";
 import PopoverTimePicker from "../components/PopoverTimePicker";
 
 function AddEditCoupons(props) {
-  // const [offerPrice, setOfferPrice] = useState("₹ 100");
+  const { submitHandler, isEditDataMode, editData } = props;
+
   const {
     control,
     handleSubmit,
@@ -38,10 +37,7 @@ function AddEditCoupons(props) {
   ];
 
   const discount = watch("discount");
-  const offerPrice = watch("offerPrice");
-  // const enrollmentField = setValue("enrollments", ENROLLMENTS_LABEL);
-  // console.log(enrollmentField, "OP");
-  // const offerPrice = watch("offerPrice");
+
   console.log(props?.editData);
   const defaultCoupon = props?.editData?.code;
   const defaultDiscount = props?.editData?.discount;
@@ -54,12 +50,12 @@ function AddEditCoupons(props) {
 
   const originalPrice = 24345; // Original price value
   useEffect(() => {
-    if (discount === "") {
-      const calculatedOfferPrice =
-        originalPrice - (originalPrice * discount) / 100;
-      console.log(calculatedOfferPrice.toFixed(2));
-      setValue("offerPrice", calculatedOfferPrice.toFixed(2));
-    }
+    // if (discount === "") {
+    const calculatedOfferPrice =
+      originalPrice - (originalPrice * discount) / 100;
+    console.log(calculatedOfferPrice.toFixed(2));
+    setValue("offerPrice", calculatedOfferPrice.toFixed(2));
+    // }
   }, [discount]);
 
   // useEffect(() => {
@@ -70,29 +66,21 @@ function AddEditCoupons(props) {
   //   }
   // }, [offerPrice]);
 
-  const onSubmit = ({
-    product,
-    couponCode,
-    discount,
-    offerPrice,
-    validFrom,
-    validTo,
-    enrollments,
-    suggest,
-  }) => {
-    const formData = new FormData();
-    formData.append("product", product);
-    formData.append("couponCode", couponCode);
-    formData.append("discount", discount);
-    formData.append("offerPrice", offerPrice);
-    formData.append("validFrom", validFrom);
-    formData.append("validTo", validTo);
-    formData.append("enrollments", enrollments);
-    formData.append("suggest", suggest);
-    for (const pair of formData.entries()) {
-      console.log(`${pair[0]},${pair[1]}`);
-    }
+  const onSubmit = (formData) => {
+    submitHandler(formData, isEditDataMode, editData);
   };
+
+  const currentDateTime = new Date();
+  const validFrom = watch("validFrom");
+  const validTo = watch("validTo");
+
+  const validateDate = () => {
+    if (validFrom && validTo && new Date(validTo) < new Date(validFrom)) {
+      return "Valid Till should not be less than valid from";
+    }
+    return true;
+  };
+
   return (
     <form
       autoComplete="off"
@@ -123,7 +111,7 @@ function AddEditCoupons(props) {
         )}
       />
       <Controller
-        name="couponCode"
+        name="code"
         control={control}
         rules={{ required: true }}
         defaultValue={defaultCoupon || ""}
@@ -131,10 +119,10 @@ function AddEditCoupons(props) {
           <TextField
             placeholder="Coupon code"
             type="alphanumeric"
-            inputProps={{ maxLength: 6 }}
-            error={Boolean(errors.couponCode)}
+            inputProps={{ minLength: 6, maxLength: 6, content: "capitalize" }}
+            error={Boolean(errors.code)}
             helperText={
-              errors.couponCode
+              errors.code
                 ? "Coupon Code is required"
                 : "No special characters.Only use text and numbers.Maximum 6 characters"
             }
@@ -152,12 +140,15 @@ function AddEditCoupons(props) {
             defaultValue={defaultDiscount || ""}
             render={({ field }) => (
               <TextField
-                placeholder="% Discount"
+                placeholder="Discount"
                 type="number"
                 // inputProps={{ min: 0, max: 100, step: 1 }}
                 error={Boolean(errors.discount)}
                 helperText={errors.discount ? "Discount is required" : ""}
                 className="no-icon"
+                InputProps={{
+                  startAdornment: <PercentIcon fontSize="small" />,
+                }}
                 {...field}
               />
             )}
@@ -168,13 +159,20 @@ function AddEditCoupons(props) {
             name="offerPrice"
             control={control}
             rules={{ required: true }}
-            defaultValue={defaultOfferPrice || ""}
             render={({ field }) => (
               <TextField
                 placeholder=" Offer price"
-                defaultValue={"₹"}
+                // defaultValue={`"₹"${defaultOfferPrice} || "₹"${offerPrice}`}
+                defaultValue={originalPrice}
                 type="number"
-                inputProps={{ min: 0, max: { originalPrice }, step: 10 }}
+                inputProps={{
+                  min: 0,
+                  max: { originalPrice },
+                  step: 10,
+                }}
+                InputProps={{
+                  startAdornment: <CurrencyRupeeIcon fontSize="small" />,
+                }}
                 // inputProps={{ maxLength: 8 }}
                 error={Boolean(errors.offerPrice)}
                 helperText={
@@ -188,20 +186,39 @@ function AddEditCoupons(props) {
             )}
           />
         </Grid>
-
-        {/* <Grid item sm={6}>
+        <Grid item sm={6}>
+          <Controller
+            name="validFrom"
+            control={control}
+            rules={{ required: false }}
+            defaultValue={defaultValidFrom || currentDateTime}
+            render={({ field }) => (
+              <PopoverTimePicker
+                selectedDate={field.value}
+                // error={Boolean(errors.validFrom)}
+                // helperText={errors.validFrom ? "Valid From is required" : " "}
+                handleTimeChange={(date) => field.onChange(date.$d)}
+                label="Valid From"
+                defaultValue={currentDateTime}
+                {...field}
+              />
+            )}
+          />
+        </Grid>
+        <Grid item sm={6}>
           <Controller
             name="validTo"
             control={control}
-            rules={{ required: true }}
+            rules={{ required: false, validate: validateDate }}
             defaultValue={defaultValidTo || ""}
             render={({ field }) => (
-              <BasicDatePicker
+              <PopoverTimePicker
                 selectedDate={field.value}
-                error={Boolean(errors.validTo)}
-                // helperText={errors.validTo ? "Valid To is required" : " "}
-                handleDateChange={(date) => field.onChange(date.$d)}
-                label="Valid To"
+                error={Boolean(errors.validTo?.message)}
+                helperText={errors.validTo ? errors.validTo?.message : " "}
+                handleTimeChange={(date) => field.onChange(date.$d)}
+                label="Valid Till"
+                defaultValue={""}
                 {...field}
               />
             )}
@@ -209,20 +226,23 @@ function AddEditCoupons(props) {
           <FormHelperText sx={{ color: "#F05330" }}>
             Don't change this if you want unlimited validity.
           </FormHelperText>
-        </Grid> */}
+        </Grid>
         <Grid item sm={6}>
           <Controller
             name="enrollments"
             control={control}
-            rules={{ required: true }}
+            rules={{ required: false }}
             defaultValue={defaultEnrollments || ""}
             render={({ field }) => (
               <TextField
                 label="Valid for"
-                placeholder="Enter a value  Enrollments"
+                placeholder="Enter a value"
                 type="numeric"
                 inputProps={{ maxLength: 2 }}
                 error={Boolean(errors.enrollments)}
+                InputProps={{
+                  endAdornment: <>Enrollments</>,
+                }}
                 // helperText={errors.enrollments ? "" : ""}
                 {...field}
               />
@@ -275,11 +295,10 @@ function AddEditCoupons(props) {
               color: "#FFF",
             },
           }}
-          // disabled={isEditDataMode ? !isDirty : false}
+          disabled={isEditDataMode ? !isDirty : false}
           onClick={handleSubmit(onSubmit, (error) => console.log(error))}
         >
-          {/* {isEditDataMode ? "Update" : "Create"} */}
-          {"Create coupon"}
+          {isEditDataMode ? "Update coupon" : "Create coupon"}
         </Button>
       </Box>
     </form>

@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
+import { Box, Button, Typography } from "@mui/material";
 
-import { deleteCoupons, getCoupons } from "../services/api.js";
+import {
+  createCoupons,
+  deleteCoupons,
+  editCoupons,
+  getCoupons,
+} from "../services/api.js";
 import { pageConstants } from "../constants/routeConstants.js";
 import { modalDeactivateCoupon } from "../constants/modelConstants.js";
 import CouponCardList from "../components/CouponCardList.jsx";
 import CouponCard from "../components/CouponCard.jsx";
 import MuiModel from "../components/common/MuiModel.jsx";
 import MuiDialogComponent from "../components/common/MuiDialogComponent.jsx";
-import { Box, Button, Typography } from "@mui/material";
-import axios from "axios";
-// import { deleteCoupons } from './../services/api';
 
 function Coupons() {
   const [coupons, setCoupons] = useState([]);
@@ -19,6 +22,8 @@ function Coupons() {
   const handleCloseModal = () => setIsOpenModal(false);
   const handleCloseDeactivateModal = () => setIsOpenDeactivateModal(false);
   const [editData, setEditData] = useState(null);
+  const id = editData?.id;
+
   useEffect(() => {
     (async () => {
       const couponsList = await getCoupons();
@@ -31,31 +36,34 @@ function Coupons() {
     setEditData(null);
   };
 
-  const submitHandler = (formData, isEditDataMode, editData) => {
+  const submitHandler = (updatedData, isEditDataMode, editData) => {
     //api call here
-    console.log("submit");
+    let latestCouponData;
+    if (isEditDataMode) {
+      latestCouponData = editCoupons(id, updatedData);
+    } else {
+      latestCouponData = createCoupons(updatedData);
+    }
+    const latestData = [...coupons, latestCouponData];
+    setCoupons(latestData);
     handleCloseModal();
   };
   const handleEdit = (coupon) => {
-    console.log("editdfsds", coupon);
-    // Open form for editing data
     setEditData(coupon);
     setIsOpenModal(true);
   };
 
   const handleDelete = (coupon) => {
-    console.log("delete", coupon);
-
     setIsOpenDeactivateModal(true);
     setDeleteCoupon(coupon);
-    // Delete data
   };
   const confirmDeleteHandler = () => {
-    console.log("deleted api");
+    deleteCoupons(deleteCoupon?.id);
+    handleCloseDeactivateModal();
   };
 
   return (
-    <Box pt={4} m={"auto"} sx={{ width: "50%" }}>
+    <Box pt={4} sx={{ width: "50%" }} m="auto">
       <Box
         pt={12}
         display="flex"
@@ -93,10 +101,9 @@ function Coupons() {
           isOpenModal={isOpenDeactivateModal}
           handleCloseModal={handleCloseDeactivateModal}
           message={modalDeactivateCoupon}
-          handleSubmit={() => confirmDeleteHandler(deleteCoupon)}
+          handleSubmit={confirmDeleteHandler}
         />
       )}
-      {/* {<EditDeleteCoupon handleEdit={handleEdit} />} */}
       {coupons?.length === 0 ? (
         <CouponCard handleCreateClick={handleCreateClick} />
       ) : (

@@ -11,7 +11,7 @@ function CardListIcons({ discount, validity, enrollment }) {
       <Typography color={"#A8A8A8"} pr={4} display="flex" alignItems="center">
         <img src={discountIcon} alt="discount" />
         <Typography variant="caption" pl={0.6}>
-          {discount}
+          {`${discount} % off`}
         </Typography>
       </Typography>
       <Typography
@@ -35,7 +35,7 @@ function CardListIcons({ discount, validity, enrollment }) {
       >
         <img src={enrollmentIcon} alt="enrollment" />
         <Typography variant="caption" pl={0.6}>
-          {`${enrollment} Enrollments`}
+          {`${enrollment || "unlimited"} Enrollments`}
         </Typography>
       </Typography>
     </Box>

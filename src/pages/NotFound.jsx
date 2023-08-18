@@ -10,8 +10,9 @@ function NotFound() {
         fontWeight={800}
         fontSize={24}
         color={"#404349"}
+        textAlign={"center"}
       >
-        No Route Found
+        Page you are looking for is not found.
       </Typography>
     </Box>
   );

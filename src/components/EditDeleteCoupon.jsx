@@ -1,24 +1,10 @@
-import React, { useState } from "react";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import React from "react";
 import { Edit, Delete } from "@mui/icons-material";
-import {
-  Box,
-  Button,
-  IconButton,
-  Popover,
-  Table,
-  TableBody,
-  TableCell,
-  TableRow,
-  Typography,
-} from "@mui/material";
+import { Box, IconButton, Popover, Typography } from "@mui/material";
 
 function EditDeleteCoupon({ anchorEl, handleEdit, handleClose, handleDelete }) {
   return (
     <>
-      {/* <IconButton onClick={handleClick}>
-        <MoreVertIcon />
-      </IconButton> */}
       <Popover
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
