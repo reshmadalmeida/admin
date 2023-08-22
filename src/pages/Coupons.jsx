@@ -1,12 +1,7 @@
 import { useState, useEffect } from "react";
 import { Box, Button, Typography } from "@mui/material";
 
-import {
-  createCoupons,
-  deleteCoupons,
-  editCoupons,
-  getCoupons,
-} from "../services/api.js";
+import { deleteCoupons, getCoupons } from "../services/api.js";
 import { pageConstants } from "../constants/routeConstants.js";
 import { modalDeactivateCoupon } from "../constants/modelConstants.js";
 import CouponCardList from "../components/CouponCardList.jsx";
@@ -24,10 +19,11 @@ function Coupons() {
   const [editData, setEditData] = useState(null);
 
   useEffect(() => {
-    (async () => {
-      const couponsList = await getCoupons();
-      setCoupons(couponsList);
-    })();
+    getCoupons().then(async (res) => {
+      if (res.status === 200) {
+        setCoupons(res.data);
+      } else console.log("error");
+    });
   }, []);
 
   const handleCreateClick = () => {

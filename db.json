@@ -12,5 +12,16 @@
       "type": "Active",
       "id": 4
     }
+  ],
+  "transactions": [
+    {
+      "id": 1,
+      "date": "23 Mar 2023",
+      "name": "Manohar Singh",
+      "email": "manohar868@gmail.com",
+      "product": "Test prep",
+      "amount": 24999,
+      "code": "MANO12"
+    }
   ]
 }

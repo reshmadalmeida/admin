@@ -1,15 +1,15 @@
 import axios from "axios";
 
 //GET 
-export const getCoupons = () =>
-  axios.get("http://localhost:3001/coupons")
-    .then(({ data }) => {
-      return data;
-    })
-    .catch((error) => {
-      console.log(error);
-      return Promise.reject(error);
-    });
+export const getCoupons = async () => {
+  try {
+    const res = await axios.get("http://localhost:3001/coupons")
+    return res;
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 
 //CREATE
 export const createCoupons = (formData) => {
@@ -36,5 +36,16 @@ export const deleteCoupons = async (couponId) => {
     return await axios.delete(`http://localhost:3001/coupons/${couponId}`)
   } catch (error) {
     console.log(error);
+  }
+}
+
+
+//Transaction row data
+export const getRowData = async () => {
+  try {
+    const res = await axios.get("http://localhost:3001/transactions")
+    return res
+  } catch (error) {
+    console.log(error)
   }
 }
